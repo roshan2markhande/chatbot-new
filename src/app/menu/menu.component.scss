@@ -1,0 +1,94 @@
+// Colors
+$primary-color: #1e2a38; // Dark blue-gray
+$secondary-color: #2e3a49; // Slightly lighter blue-gray
+$accent-color: #ff6f61; // Coral for accents
+$text-color: #f5f5f5; // Off-white for text
+$background-color: #121212; // Almost black
+
+// Main container styles
+.sidenav-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $background-color;
+
+  .sidenav {
+    width: 240px;
+    background-color: $primary-color;
+    color: $text-color;
+    transition: width 0.3s ease;
+
+    .mat-list-item {
+      color: $text-color;
+      &:hover {
+        background-color: $secondary-color;
+      }
+    }
+
+    .mat-icon {
+      color: $accent-color;
+    }
+
+    .menu-header {
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      height: 64px;
+      background-color: $secondary-color;
+
+      button {
+        color: $accent-color;
+      }
+    }
+  }
+
+  .mat-sidenav-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: $background-color;
+
+    .header {
+      height: 64px;
+      background-color: $primary-color;
+      color: $text-color;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      button {
+        color: $accent-color;
+      }
+    }
+
+    .content {
+      flex: 1;
+      padding: 16px;
+      background-color: $background-color;
+      color: $text-color;
+      font-family: 'Roboto', sans-serif;
+    }
+  }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .sidenav {
+    width: 200px;
+  }
+
+  .sidenav.closed {
+    width: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidenav {
+    width: 150px;
+  }
+
+  .sidenav.closed {
+    width: 50px;
+  }
+}

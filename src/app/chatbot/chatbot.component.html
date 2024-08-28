@@ -1,0 +1,23 @@
+<mat-card class="chatbot-container">
+  <mat-card-header class="chatbot-header">
+    <img mat-card-avatar src="assets/logo.png" alt="Chatbot Logo" class="chatbot-logo">
+    <mat-card-title>My Chatbot</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content class="chatbot-messages" #chatWindow>
+    <div *ngFor="let message of messages" class="message" [ngClass]="{ 'user-message': message.sender === 'user', 'bot-message': message.sender === 'bot' }">
+      <span class="message-text">{{ message.text }}</span>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions class="chatbot-input">
+    <mat-form-field appearance="outline" class="chat-input-field">
+      <mat-label>Type a message...</mat-label>
+      <input matInput [(ngModel)]="userMessage" (keyup.enter)="sendMessage()">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="sendMessage()">Send</button>
+    <button mat-icon-button class="voice-button" aria-label="Voice Input" (click)="startVoiceRecognition()">
+      <mat-icon>mic</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

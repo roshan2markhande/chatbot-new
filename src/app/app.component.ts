@@ -16,10 +16,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+import { NgModule } from '@angular/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 @Component({
-  selector: 'app-root',
+  selector: 'app-root', 
   standalone: true,
-  imports: [CommonModule,MatSidenavModule, MatToolbarModule, MatButtonModule,MatIconModule, MatListModule,MatCardModule,MatInputModule,MatFormFieldModule,FormsModule,RouterOutlet,ChatbotComponent,HelpTComponent,SettingsComponent,MenuComponent],
+  imports: [CommonModule,TranslateModule,MatSidenavModule, MatToolbarModule, MatButtonModule,MatIconModule, MatListModule,MatCardModule,MatInputModule,MatFormFieldModule,FormsModule,RouterOutlet,ChatbotComponent,HelpTComponent,SettingsComponent,MenuComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -30,4 +37,8 @@ export class AppComponent {
   toggleMenu() {
     this.menuOpen = this.menuOpen;
   }
+  constructor(private translate: TranslateService) {
+    translate.setDefaultLang('en'); // Default language
+  }
+  
 }

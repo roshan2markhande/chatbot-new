@@ -1,19 +1,25 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
 export class TranslationService {
-  constructor(private translate: TranslateService) {
-    this.translate.setDefaultLang('en'); // Set default language
-  }
+  private apiKey = 'YOUR_GOOGLE_API_KEY'; // Replace with your Google API key
+  private apiUrl = 'https://translation.googleapis.com/language/translate/v2';
 
-  changeLanguage(language: string): void {
-    this.translate.use(language);
-  }
+  constructor(private http: HttpClient) {}
 
-  getTranslation(key: string): string {
-    return this.translate.instant(key);
+  translate(text: string, targetLanguage: string): Observable<any> {
+    const url = `${this.apiUrl}?key=${this.apiKey}`;
+    const body = {
+      q: text,
+      target: targetLanguage,
+      format: 'text'
+    };
+
+    return this.http.post<any>(url, body);
   }
 }

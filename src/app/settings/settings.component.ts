@@ -1,26 +1,23 @@
-import { Component } from '@angular/core';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateService } from '@ngx-translate/core';
-import { TranslationService } from '../services/translation.service';
+import { Component, inject } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { NgSelectOption } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
-export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+import { HttpClientModule } from '@angular/common/http';  // Import HttpClientModule
+
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [TranslateModule,NgIf,FormsModule],
+  imports: [NgIf,FormsModule,HttpClientModule],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'
 })
 export class SettingsComponent {
+  private http = inject(HttpClient);  // Use Angular’s injection system for standalone components
+
   settings = {
     theme: 'light',
     notifications: 'enabled',
@@ -28,26 +25,28 @@ export class SettingsComponent {
   };
 
   notificationMessage: string = '';
+  apiKey = 'YOUR_GOOGLE_API_KEY'; // Replace with your Google API key
 
-  constructor(private translationService: TranslationService) {
-    // Load settings from localStorage if available
-    const savedSettings = localStorage.getItem('settings');
-    if (savedSettings) {
-      this.settings = JSON.parse(savedSettings);
-      this.applySettings();
-    }
+  constructor() {
+    this.loadSettings();
+  }
+
+  loadSettings(): void {
+    this.applySettings();
   }
 
   onSubmit(): void {
-    // Save the settings to localStorage
-    localStorage.setItem('settings', JSON.stringify(this.settings));
-
-    // Apply the settings
     this.applySettings();
 
-    // Display notification message
-    this.notificationMessage = this.translationService.getTranslation('Settings saved successfully!');
-    setTimeout(() => this.notificationMessage = '', 3000); // Hide after 3 seconds
+    this.translateText('Settings saved successfully!', this.settings.language).subscribe(
+      (response: any) => {
+        this.notificationMessage = response.data.translations[0].translatedText;
+        setTimeout(() => this.notificationMessage = '', 3000); // Hide after 3 seconds
+      },
+      error => {
+        console.error('Error translating text:', error);
+      }
+    );
   }
 
   applySettings(): void {
@@ -57,21 +56,26 @@ export class SettingsComponent {
   }
 
   applyTheme(theme: string): void {
-    document.body.className = theme; // Apply the theme to the body element
+    document.body.className = theme;
   }
 
   configureNotifications(notifications: string): void {
-    if (notifications === 'enabled') {
-      console.log('Notifications enabled');
-      // Logic to enable notifications
-    } else {
-      console.log('Notifications disabled');
-      // Logic to disable notifications
-    }
+    console.log(notifications === 'enabled' ? 'Notifications enabled' : 'Notifications disabled');
   }
 
   changeLanguage(language: string): void {
-    this.translationService.changeLanguage(language);
-    console.log('Language changed to:', language);
+    // Apply language changes (if needed)
   }
+
+  translateText(text: string, targetLanguage: string) {
+    const url = `https://translation.googleapis.com/language/translate/v2?key=${this.apiKey}`;
+    const body = {
+      q: text,
+      target: targetLanguage,
+      format: 'text'
+    };
+
+    return this.http.post(url, body);
+  }
+
 }

@@ -38,21 +38,21 @@ export class SettingsComponent {
   onSubmit(): void {
     this.applySettings();
 
-    this.translateText('Settings saved successfully!', this.settings.language).subscribe(
-      (response: any) => {
-        this.notificationMessage = response.data.translations[0].translatedText;
-        setTimeout(() => this.notificationMessage = '', 3000); // Hide after 3 seconds
-      },
-      error => {
-        console.error('Error translating text:', error);
-      }
-    );
+  //   this.translateText('Settings saved successfully!', this.settings.language).subscribe(
+  //     (response: any) => {
+  //       this.notificationMessage = response.data.translations[0].translatedText;
+  //       setTimeout(() => this.notificationMessage = '', 3000); // Hide after 3 seconds
+  //     },
+  //     error => {
+  //       console.error('Error translating text:', error);
+  //     }
+  //   );
   }
 
   applySettings(): void {
     this.applyTheme(this.settings.theme);
     this.configureNotifications(this.settings.notifications);
-    this.changeLanguage(this.settings.language);
+   // this.changeLanguage(this.settings.language);
   }
 
   applyTheme(theme: string): void {
@@ -67,15 +67,15 @@ export class SettingsComponent {
     // Apply language changes (if needed)
   }
 
-  translateText(text: string, targetLanguage: string) {
-    const url = `https://translation.googleapis.com/language/translate/v2?key=${this.apiKey}`;
-    const body = {
-      q: text,
-      target: targetLanguage,
-      format: 'text'
-    };
+  // translateText(text: string, targetLanguage: string) {
+  //   const url = `https://translation.googleapis.com/language/translate/v2?key=${this.apiKey}`;
+  //   const body = {
+  //     q: text,
+  //     target: targetLanguage,
+  //     format: 'text'
+  //   };
 
-    return this.http.post(url, body);
-  }
+  //   return this.http.post(url, body);
+  // }
 
 }
